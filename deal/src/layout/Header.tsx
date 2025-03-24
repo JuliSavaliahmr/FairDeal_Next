@@ -1,28 +1,38 @@
-import Image from 'next/image'
-import React from 'react'
+"use client";
 
-import logo from '../assets/images/logo.png'
-import { ChevronDown } from 'lucide-react';
+import { useState } from "react";
+
+import Image from "next/image";
+import { Menu, X, ChevronDown } from "lucide-react";
+
+import Button from "@/components/particlejs/common/Button";
+
+import logo from "../assets/images/logo.png";
 
 const Header = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => setIsOpen((prev) => !prev);
+  const closeMenu = () => setIsOpen(false);
+
   return (
-    <header className="h-[88px] px-[100px] py-[20px] bg-white/30 backdrop-blur-lg fixed top-0 left-0 w-full z-50">
-      <div className="container mx-auto">
-        <div className="flex items-center justify-between">
-          <div className="logo">
-            <h1>
-              <a href="#">
-                <Image src={logo} alt="logo" />
-              </a>
-            </h1>
-          </div>
-          <nav className="flex flex-wrap items-center">
+    <header className="fixed top-0 left-0 w-full z-50 bg-white/30 backdrop-blur-lg shadow-md">
+      <div className="container mx-auto px-4 md:px-8  h-[70px] sm:h-[88px] flex items-center justify-between">
+        <div className="logo">
+          <a href="#">
+            <Image src={logo} alt="Logo" width={0} height={0} className="max-[320px]:h-[34px] xs:!w-[164px] lg!:h-[48px] lg!:w-[231px]"  />
+          </a>
+        </div>
+    
+        {/* Desktop Navigation */}
+      
+        <nav className="hidden lg:flex lg:items-center">
             <ul className="flex mr-[30px]">
               <li className="pr-[32px]">
                 <a href="#" className="text-[16px] font-medium">Home</a>
               </li>
               <li className="pr-[32px]">
-                <a href="#" className="text-[16px] font-medium">About Us</a>
+                <a href="#" className="text-[16px] font-medium">About Us</a>  
               </li>
               <li className="pr-[32px] flex">
                 <a href="#" className="text-[16px] font-medium">Services</a> 
@@ -37,10 +47,49 @@ const Header = () => {
             </ul>
             {/* Buttons */}
             <div>
-              <button className="px-[16px] py-[14px] text-[16px] border-2 rounded-[30px] mr-[16px]">Buy on a Fair deal</button>
-              <button className="px-[16px] py-[14px] text-[16px] border-2 rounded-[30px] btn-blue">Sell on a Fair deal</button>
+            <Button variant="secondary" onClick={() => alert("Buying!")}>Buy on a Fair deal</Button>
+            <Button variant="primary" className=" ml-[16px]" onClick={() => alert("Buying!")}>Sell on a Fair deal</Button>
             </div>
           </nav>
+
+        {/* Mobile Menu btn*/}
+        <button className="lg:hidden" onClick={toggleMenu} aria-label="Toggle menu">
+          {isOpen ? <X size={28} /> : <Menu size={28} />}
+        </button>
+
+        {/* toggle drawer*/}
+        <div
+          className={`fixed top-0 right-0 h-screen w-[75%] max-w-[300px] bg-white shadow-lg transform ${
+            isOpen ? "translate-x-0" : "translate-x-full"
+          } transition-transform duration-300 ease-in-out lg:hidden`}
+        >
+          {/* close btn*/}
+          <div className="flex items-center justify-between px-6 py-4 border-b bg-white">
+            <Image src={logo} alt="Logo" width={120} height={35} />
+            <button onClick={closeMenu} aria-label="Close menu">
+              <X size={28} />
+            </button>
+          </div>
+
+          {/* Menu Items */}
+          <ul className="flex flex-col px-6 pt-6 space-y-4 bg-white">
+            {["Home", "About Us", "Services", "Careers", "Contact Us"].map((item, index) => (
+              <li key={index} className="flex items-center">
+                <a href="#" className="text-[16px] font-medium">{item}</a>
+                {item === "Services" && <ChevronDown className="ml-1 w-4 h-4" />}
+              </li>
+            ))}
+          </ul>
+
+          {/* mobile btn*/}
+          <div className="flex flex-col px-6 pt-6 space-y-4 bg-white">
+            <button className="px-5 py-3 text-[16px] border-2 rounded-[30px]">
+              Buy on a Fair Deal
+            </button>
+            <button className="px-5 py-3 text-[16px] border-2 rounded-[30px] bg-blue-600 text-white ">
+              Sell on a Fair Deal
+            </button>
+          </div>
         </div>
       </div>
     </header>
